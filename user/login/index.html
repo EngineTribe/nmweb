@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Login - Course World Web</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue-i18n@9/dist/vue-i18n.global.js"></script>
+    <link rel="stylesheet" href="/background.css">
+    <link rel="stylesheet" href="/fonts.css">
+    <link rel="stylesheet" href="/rotating.css">
+    <link rel="stylesheet" href="/user/login/index.css">
+</head>
+<body>
+<!-- Sliding background -->
+<div class="sliding-background-root">
+    <div class="sliding-background"></div>
+</div>
+<div id="app">
+    <div class="nm-iname-bg">
+        <img draggable="false" src="/assets/images/spr_iname_bg.png" alt="iname-bg">
+        <div class="nm-iname-item nm-iname-title font-regular">
+            {{ $t('title.login') }}
+        </div>
+        <div class="nm-iname-item nm-iname-input">
+            <div class="nm-iname-username">
+                <input
+                        class="nm-iname-textarea"
+                        placeholder=""
+                        maxlength="25"
+                        id="username"
+                        v-model="username"
+                >
+            </div>
+            <div class="nm-iname-password">
+                <input
+                        class="nm-iname-textarea nm-iname-textarea-password"
+                        placeholder=""
+                        maxlength="25"
+                        id="password"
+                        v-model="password"
+                        type="password"
+                >
+            </div>
+        </div>
+        <div class="nm-iname-item" v-if="!loading">
+            <img src="/assets/images/spr_login_button.png" alt="login-button" class="nm-iname-button" @click="login">
+        </div>
+        <div class="nm-iname-item" v-if="loading">
+            <img src="/assets/images/spr_login_button_loading.png" alt="login-button-loading"
+                 class="nm-iname-button-loading">
+        </div>
+        <div class="nm-iname-item" v-if="loading">
+            <img src="/assets/images/spr_load_image_white.png" alt="loading" class="nm-iname-loading rotating">
+        </div>
+        <div class="nm-iname-item nm-iname-message font-regular">
+            {{ responseMessage }}
+        </div>
+    </div>
+</div>
+
+<script>
+    const {createApp} = Vue;
+    const {createI18n} = VueI18n;
+    const xhr = new XMLHttpRequest();
+    const urlParams = new URLSearchParams(window.location.search);
+
+    const messages = {
+        en_US: {
+            page: {
+                title: 'Login - Course World Web'
+            },
+            title: {
+                login: "LOGIN"
+            },
+            message: {
+                connection_failed: 'Connection failed',
+                hello: 'Hello, '
+            }
+        },
+        es_ES: {
+            page: {
+                title: 'Iniciar Sesión - Niveles Mundiales Web'
+            },
+            title: {
+                login: "INICIAR SESIÓN"
+            },
+            message: {
+                connection_failed: 'Conexión fallida',
+                hello: 'Hola, '
+            }
+        },
+        zh_CN: {
+            page: {
+                title: '登录 - 全球关卡网页版'
+            },
+            title: {
+                login: "登录"
+            },
+            message: {
+                connection_failed: '连接失败',
+                hello: '欢迎，'
+            }
+        }
+    }
+
+    const vm = createApp({
+        data() {
+            return {
+                username: '',
+                password: '',
+                server: null,
+                loading: false,
+                responseMessage: ''
+            }
+        },
+        created() {
+            document.title = this.$t('page.title');
+        },
+        mounted() {
+            const vm = this;
+            xhr.open('GET', '/servers.json', true);
+            xhr.send(null);
+            xhr.onreadystatechange = () => {
+                if (xhr.readyState === 4) {
+                    if (xhr.status !== 200) {
+                        alert(vm.$t('message.connection_failed'));
+                    } else {
+                        const servers = JSON.parse(xhr.responseText).servers;
+                        const selectedServerId = urlParams.get('server');
+                        if (selectedServerId === null) {
+                            vm.server = servers[0];
+                        } else {
+                            vm.server = (() => {
+                                for (const server of servers) {
+                                    if (server.id === selectedServerId) {
+                                        return server;
+                                    }
+                                }
+                            })();
+                        }
+                    }
+                }
+            }
+        },
+        methods: {
+            login() {
+                const vm = this;
+                vm.loading = true;
+                let token;
+                if (vm.server.is_enginetribe) {
+                    token = vm.server.tokens[vm.$i18n.locale];
+                } else {
+                    token = vm.server.token;
+                }
+                xhr.open('POST', vm.server.host + '/user/login', true);
+                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                xhr.send(
+                    'alias=' + vm.username +
+                    '&password=' + vm.password +
+                    '&token=' + token
+                );
+                xhr.onreadystatechange = () => {
+                    if (xhr.readyState === 4) {
+                        if (xhr.status !== 200) {
+                            alert(vm.$t('message.connection_failed'));
+                        } else {
+                            const response = JSON.parse(xhr.responseText);
+                            document.cookie = `auth_code=${response.auth_code}; SameSite=Strict;`;
+                            vm.responseMessage = vm.$t('message.hello') + response.username;
+                            setTimeout(() => {
+                                window.location.href = '/stages/detailed_search';
+                            }, 1000);
+                        }
+                        vm.loading = false;
+                    }
+                }
+            }
+        }
+    })
+
+    const i18n = createI18n({
+        locale: navigator.language.replace('-', '_'),
+        fallbackLocale: ['en_US', 'es_ES', 'zh_CN'],
+        messages
+    })
+    vm.use(i18n).mount('#app');
+</script>
+</body>
+</html>

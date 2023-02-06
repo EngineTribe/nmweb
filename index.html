@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Course World Web</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue-i18n@9/dist/vue-i18n.global.js"></script>
+    <link rel="stylesheet" href="/background.css">
+    <link rel="stylesheet" href="/fonts.css">
+    <link rel="stylesheet" href="/index.css">
+</head>
+<body>
+<!-- Sliding background -->
+<div class="sliding-background-root">
+    <div class="sliding-background"></div>
+    <div class="planet-1">
+        <img src="/assets/images/spr_nm_planet_1.png" alt="planet-1">
+    </div>
+    <div class="planet-2">
+        <img src="/assets/images/spr_nm_planet_2.png" alt="planet-2">
+    </div>
+    <div class="planet-3">
+        <img src="/assets/images/spr_nm_planet_3.png" alt="planet-3">
+    </div>
+</div>
+<div id="app">
+    <div class="nm-buttons">
+        <div class="nm-button-big-root">
+            <div class="nm-button-big" id="nm-button-1">
+                <img draggable="false" src="assets/images/spr_nm_buttons_big_1.png" alt="Explore Courses">
+                <span class="font-index-regular">{{ $t("title.explore_courses") }}</span>
+            </div>
+            <div class="nm-button-big" id="nm-button-2">
+                <img draggable="false" src="assets/images/spr_nm_buttons_big_2.png" alt="Ninji Speedruns">
+                <span class="font-index-regular">{{ $t("title.ninji_speedruns") }}</span>
+            </div>
+        </div>
+        <div class="nm-title font-big"> {{ $t("title.title") }}</div>
+        <div class="nm-button-big-root">
+            <div class="nm-button-big" id="nm-button-3">
+                <img draggable="false" src="assets/images/spr_nm_buttons_big_3.png" alt="Multiplayer">
+                <span class="font-index-regular">{{ $t("title.multiplayer") }}</span>
+            </div>
+            <div class="nm-button-big" id="nm-button-4">
+                <img draggable="false" src="assets/images/spr_nm_buttons_big_4.png" alt="Super Mario Challenge">
+                <span class="font-index-regular">{{ $t("title.super_mario_challenge") }}</span>
+            </div>
+        </div>
+    </div>
+    <div class="nm-server-name font-regular">
+        {{ serverName }}
+    </div>
+</div>
+
+<script>
+    const {createApp} = Vue;
+    const {createI18n} = VueI18n;
+    const xhr = new XMLHttpRequest();
+    const urlParams = new URLSearchParams(window.location.search);
+    const messages = {
+        en_US: {
+            page: {
+                title: 'Course World Web'
+            },
+            title: {
+                title: 'Course World',
+                explore_courses: 'Explore Courses',
+                ninji_speedruns: 'Ninji Speedruns',
+                super_mario_challenge: 'Super Mario Challenge',
+                multiplayer: 'Multiplayer',
+            },
+            message: {
+                connection_failed: 'Connection failed',
+            }
+        },
+        es_ES: {
+            page: {
+                title: 'Niveles Mundiales Web'
+            },
+            title: {
+                title: 'Niveles Mundiales',
+                explore_courses: 'Explorar Niveles',
+                ninji_speedruns: 'Speedruns de Ninji',
+                super_mario_challenge: 'Desafío Super Mario',
+                multiplayer: 'Multijugador',
+            },
+            message: {
+                connection_failed: 'Conexión fallida',
+            }
+        },
+        zh_CN: {
+            page: {
+                title: '全球关卡网页版'
+            },
+            title: {
+                title: '全球关卡',
+                explore_courses: '浏览关卡',
+                ninji_speedruns: '哈库计时挑战',
+                super_mario_challenge: '马力欧耐力挑战',
+                multiplayer: '以连接方式游玩',
+            },
+            message: {
+                connection_failed: '连接失败',
+            }
+        }
+    }
+    const vm = createApp({
+        data() {
+            return {
+                serverName: '',
+            }
+        },
+        created() {
+            document.title = this.$t('page.title');
+        },
+        mounted() {
+            const vm = this;
+            xhr.open('GET', '/servers.json', true);
+            xhr.send(null);
+            xhr.onreadystatechange = () => {
+                if (xhr.readyState === 4) {
+                    if (xhr.status !== 200) {
+                        this.serverName = this.$t('message.connection_failed');
+                    } else {
+                        const servers = JSON.parse(xhr.responseText).servers;
+                        vm.servers = servers;
+                        const selectedServerId = urlParams.get('server');
+                        if (selectedServerId === null) {
+                            vm.serverName = servers[0].name;
+                        } else {
+                            const selectedServer = (() => {
+                                for (const server of servers) {
+                                    if (server.id === selectedServerId) {
+                                        return server;
+                                    }
+                                }
+                            })();
+                            vm.serverName = selectedServer.name;
+                        }
+                    }
+                }
+            }
+        },
+        methods: {
+        }
+    });
+    const i18n = createI18n({
+        locale: navigator.language.replace('-', '_'),
+        fallbackLocale: ['en_US', 'es_ES', 'zh_CN'],
+        messages
+    });
+    vm.use(i18n).mount('#app');
+</script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+@font-face {
+    font-family: 'Super Mario Maker 2';
+    src: url('/assets/fonts/SuperMarioMaker2.ttf');
+}
+
+@font-face {
+    font-family: 'DFPZongYiW7-GB';
+    src: url('/assets/fonts/DFPZongYiW7-GB.ttf');
+}
+
+@font-face {
+    font-family: 'AsepriteFont';
+    src: url('/assets/fonts/AsepriteFont.ttf');
+}
+
+@font-face {
+    font-family: 'DinkieBitmap';
+    src: url('/assets/fonts/DinkieBitmap.woff2');
+}
+
+@font-face {
+    font-family: 'GuanZhi 8px';
+    src: url('/assets/fonts/GuanZhi_8px.ttf');
+}
+
+.font-big {
+    font-family: 'Super Mario Maker 2', 'DFPZongYiW7-GB', sans-serif;
+    color: white;
+    font-size: 5vh;
+}
+
+
+.font-index-regular {
+    font-family: 'DinkieBitmap', 'GuanZhi 8px', sans-serif;
+    color: white;
+    font-size: 3.5vh;
+}
+
+.font-regular {
+    font-family: 'DinkieBitmap', 'GuanZhi 8px', sans-serif;
+    color: white;
+    font-size: 3vh;
+}

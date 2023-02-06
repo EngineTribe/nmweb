@@ -1,0 +1,96 @@
+#app {
+    height: 100vh;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.nm-iname-bg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.nm-iname-bg > img {
+    height: 60vh;
+}
+
+.nm-iname-item {
+    float: top;
+    position: absolute;
+}
+
+.nm-iname-title {
+    top: 28vh;
+}
+
+.nm-iname-username {
+    position: relative;
+    top: 29vh
+}
+
+.nm-iname-password {
+    position: relative;
+    top: 32.5vh
+}
+
+.nm-iname-input {
+    display: flex;
+    justify-content: left;
+    height: 60vh;
+    width: 40vh;
+    flex-direction: column;
+}
+
+.nm-iname-textarea {
+    position: relative;
+    left: 4.6vh;
+    width: 35vh;
+    height: 5vh;
+    font-size: 5vh;
+    border: 0;
+    background: transparent;
+    color: black;
+    resize: none;
+    font-family: 'AsepriteFont', sans-serif;
+    overflow: hidden;
+}
+
+.nm-iname-textarea:focus {
+    outline: none;
+}
+
+.nm-iname-textarea-password {
+    font-family: 'DinkieBitmap', 'GuanZhi 8px', sans-serif !important;
+    font-size: 3vh;
+    width: 27vh;
+}
+
+.nm-iname-button {
+    position: relative;
+    height: 6.241vh;
+    left: 17vh;
+    top: 10.5vh;
+    cursor: pointer;
+}
+
+.nm-iname-button-loading {
+    position: relative;
+    height: 6.241vh;
+    left: 16.9vh;
+    top: 10.5vh;
+}
+
+.nm-iname-loading {
+    position: relative;
+    height: 4vh;
+    left: 16.9vh;
+    top: 10.5vh;
+}
+
+.nm-iname-message {
+    top: 70vh;
+}

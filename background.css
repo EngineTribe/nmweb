@@ -1,0 +1,41 @@
+html,body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.sliding-background-root {
+    overflow: inherit;
+    width: 100%;
+    height: inherit;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -100;
+}
+
+.sliding-background {
+    height: inherit;
+    width: calc(100vh * 5.3328);
+    background: url("/assets/images/bg_super_experto.png") repeat-x;
+    background-size: contain;
+    animation: slide 18s linear infinite;
+    z-index: -100;
+}
+
+@keyframes slide {
+    0% {
+        transform: translate3d(0, 0, 0);
+    }
+    100% {
+        transform: translate3d(calc(100vh * -1.7776), 0, 0);
+    }
+}
+
+.sliding-background-root > div {
+    z-index: 0;
+}

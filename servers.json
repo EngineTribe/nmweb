@@ -1,0 +1,22 @@
+{
+  "servers": [
+    {
+      "name": "Engine Tribe",
+      "id": "enginetribe",
+      "host": "http://enginetribe.gq:30000",
+      "is_enginetribe": true,
+      "tokens": {
+        "zh_CN": "SMMWEPCCN",
+        "en_US": "SMMWEPCEN",
+        "es_ES": "SMMWEPCES"
+      }
+    },
+    {
+      "name": "Engine-bot",
+      "id": "enginebot",
+      "host": "http://103.195.101.206:25624",
+      "is_enginetribe": false,
+      "token": "282041415"
+    }
+  ]
+}

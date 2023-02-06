@@ -1,0 +1,84 @@
+.planet-1 {
+    position: absolute;
+    top: 50vh;
+    left: 3vw;
+}
+
+.planet-1 > img {
+    width: 20vw;
+}
+
+.planet-2 {
+    position: absolute;
+    top: 30vh;
+    left: 74vw;
+}
+
+.planet-2 > img {
+    width: 20vw;
+}
+
+.planet-3 {
+    position: absolute;
+    top: 7vh;
+    left: 30vw;
+}
+
+.planet-3 > img {
+    width: 7vw;
+}
+
+#app {
+    height: 100vh;
+    z-index: 100;
+    display: flex;
+    align-items:  center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.nm-buttons {
+    display: flex;
+    align-items:  center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.nm-title {
+    display: flex;
+    justify-content: center;
+    margin-top: 1vh;
+    margin-bottom: 6vh;
+}
+
+.nm-button-big-root {
+    display: flex;
+    flex-direction: row;
+    gap: 5vh;
+}
+
+.nm-button-big {
+    display: flex;
+    flex-direction: column;
+}
+
+.nm-button-big > img {
+    height: 15vh;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-user-drag: none;
+    -moz-user-select: none;
+}
+
+.nm-button-big > span {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    top: -7vh;
+}
+
+.nm-server-name {
+    float: bottom;
+    position: absolute;
+    bottom: 5vh;
+}

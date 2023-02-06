@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Explore Courses - Course World Web</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue-i18n@9/dist/vue-i18n.global.js"></script>
+    <link rel="stylesheet" href="/background.css">
+    <link rel="stylesheet" href="/fonts.css">
+    <link rel="stylesheet" href="/stages/detailed_search/index.css">
+</head>
+
+<body>
+<div id="app">
+    <div class="nm-detailed-search-root">
+        <div class="nm-detailed-search-head">
+            <img src="/assets/images/spr_nm_castle.png" class="nm-detailed-search-head-title-logo">
+            <div class="font-regular">
+                {{ $t('title.title') }}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const {createApp} = Vue;
+    const {createI18n} = VueI18n;
+    const xhr = new XMLHttpRequest();
+    const urlParams = new URLSearchParams(window.location.search);
+
+    const messages = {
+        en_US: {
+            page: {
+                title: 'Explore Courses - Course World Web'
+            },
+            title: {
+                title: "Explore Courses"
+            },
+            message: {
+                connection_failed: 'Connection failed',
+            }
+        },
+        es_ES: {
+            page: {
+                title: 'Explorar Niveles - Niveles Mundiales Web'
+            },
+            title: {
+                title: "Explorar Niveles"
+            },
+            message: {
+                connection_failed: 'Conexión fallida',
+            }
+        },
+        zh_CN: {
+            page: {
+                title: '浏览关卡 - 全球关卡网页版'
+            },
+            title: {
+                title: "浏览关卡"
+            },
+            message: {
+                connection_failed: '连接失败',
+            }
+        }
+    }
+
+    const vm = createApp({
+        created() {
+            document.title = this.$t('page.title');
+        }
+    });
+
+    const i18n = createI18n({
+        locale: navigator.language.replace('-', '_'),
+        fallbackLocale: ['en_US', 'es_ES', 'zh_CN'],
+        messages
+    });
+    vm.use(i18n).mount('#app');
+</script>
+</body>
