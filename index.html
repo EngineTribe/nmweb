@@ -26,7 +26,7 @@
 <div id="app">
     <div class="nm-buttons">
         <div class="nm-button-big-root">
-            <div class="nm-button-big" id="nm-button-1">
+            <div class="nm-button-big" id="nm-button-1" @click="jump_to_explore_courses">
                 <img draggable="false" src="assets/images/spr_nm_buttons_big_1.png" alt="Explore Courses">
                 <span class="font-index-regular">{{ $t("title.explore_courses") }}</span>
             </div>
@@ -142,6 +142,9 @@
             }
         },
         methods: {
+            jump_to_explore_courses() {
+                window.location.href = '/stages/detailed_search/';
+            }
         }
     });
     const i18n = createI18n({
