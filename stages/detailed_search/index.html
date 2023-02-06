@@ -67,6 +67,9 @@
     const vm = createApp({
         created() {
             document.title = this.$t('page.title');
+            if (document.cookie.indexOf('auth_code=') === -1) {
+                window.location.href = '/user/login/';
+            }
         }
     });
 
