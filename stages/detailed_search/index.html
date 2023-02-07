@@ -80,29 +80,26 @@
         </div>
 
         <div class="nm-detailed-search-rows">
-            <div v-for="i in [0,1,2,3,4]" class="nm-detailed-search-row">
+            <div v-for="course in courseList" class="nm-detailed-search-row">
                 <div class="nm-row-singleline">
-                    <div class="nm-row-gamestyle" :style="getGameStyleCSS(i)"></div>
-                    <div class="nm-row-name">¡Hola, Niveles Mundiales Web! ¡Hola, Niveles Mundiales Web! ¡Hola, Niveles
-                        Mundiales Web!
-                    </div>
+                    <div class="nm-row-gamestyle" :style="getGameStyleCSS(course.apariencia)"></div>
+                    <div class="nm-row-name">{{course.name}}</div>
                 </div>
                 <div>
-                    <div class="nm-row-environment" :style="getEnvironmentCSS(i, 0)"></div>
+                    <div class="nm-row-environment" :style="getEnvironmentCSS(course.apariencia, course.entorno)"></div>
                 </div>
                 <div class="nm-row-line nm-row-line1">
-                    <img :src="`/assets/images/nm_icons/like${0 ? 'd' : 's'}.png`" alt="like">
-                    <div>1</div>
+                    <img :src="`/assets/images/nm_icons/like${course.user_data.liked===0 ? 'd' : 's'}.png`" alt="like">
+                    <div>{{course.likes}}</div>
                     <div class="gap"></div>
-                    <img :src="`/assets/images/nm_icons/dislike${0 ? 'd' : 's'}.png`" alt="like">
-                    <div>1</div>
+                    <img :src="`/assets/images/nm_icons/dislike${course.user_data.liked===1 ? 'd' : 's'}.png`" alt="like">
+                    <div>{{course.dislikes}}</div>
                 </div>
                 <div class="nm-row-line nm-row-line2">
                     <img :src="`/assets/images/nm_icons/tag.png`" alt="like">
-                    <div>标准</div>
-                    <div>1</div>
+                    <div>{{course.etiquetas}}</div>
                 </div>
-                <div class="nm-row-maker">YidaozhanYa</div>
+                <div class="nm-row-maker">{{course.author}}</div>
             </div>
         </div>
     </div>
@@ -111,7 +108,6 @@
 <script>
     const {createApp} = Vue;
     const {createI18n} = VueI18n;
-    const xhr = new XMLHttpRequest();
     const urlParams = new URLSearchParams(window.location.search);
 
     const messages = {
@@ -167,6 +163,7 @@
             return {
                 pageNum: 1,
                 selectedTab: 3,
+                token: '',
                 authCode: '',
                 gameStyleMap: {
                     0: 'smb', 1: 'smb3', 2: 'smw', 3: 'nsmbu'
@@ -186,7 +183,8 @@
                     11: 'beach',
                     12: 'mountain',
                     13: 'volcano'
-                }
+                },
+                courseList: {}
             }
         },
         created() {
@@ -195,6 +193,36 @@
                 window.location.href = '/user/login/';
             }
             this.authCode = document.cookie.split('auth_code=')[1].split(';')[0];
+            this.imId = document.cookie.split('im_id=')[1].split(';')[0];
+        },
+        mounted() {
+            const vm = this;
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', '/servers.json', true);
+            xhr.send(null);
+            xhr.onreadystatechange = () => {
+                if (xhr.readyState === 4) {
+                    if (xhr.status !== 200) {
+                        alert(vm.$t('message.connection_failed'));
+                    } else {
+                        const servers = JSON.parse(xhr.responseText).servers;
+                        const selectedServerId = urlParams.get('server');
+                        if (selectedServerId === null) {
+                            vm.server = servers[0];
+                        } else {
+                            vm.server = (() => {
+                                for (const server of servers) {
+                                    if (server.id === selectedServerId) {
+                                        return server;
+                                    }
+                                }
+                            })();
+                        }
+                        vm.token = vm.server.is_enginetribe ? vm.server.tokens[vm.$i18n.locale] : vm.server.token;
+                        vm.loadCourseList();
+                    }
+                }
+            }
         },
         methods: {
             switchTab(tab) {
@@ -217,6 +245,32 @@
                 } else {
                     return `background: url("/assets/images/environments/unknown.png"); background-size: 100% 100%;`
                 }
+            },
+            loadCourseList() {
+                const vm = this;
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', vm.server.host + '/stages/detailed_search', true);
+                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                xhr.send(
+                    'auth_code=' + vm.authCode +
+                    '&discord_id=' + vm.imId +
+                    '&token=' + vm.token
+                );
+                xhr.onreadystatechange = () => {
+                    if (xhr.readyState === 4) {
+                        if (xhr.status !== 200) {
+                            alert(vm.$t('message.connection_failed'));
+                        } else {
+                            const response = JSON.parse(xhr.responseText);
+                            if (response.hasOwnProperty('error_type')) {
+                                alert(response.message);
+                            } else {
+                                vm.courseList = response.result;
+                            }
+                        }
+                    }
+                }
+
             }
         }
     });
