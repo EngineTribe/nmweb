@@ -189,11 +189,6 @@
         },
         created() {
             document.title = this.$t('page.title');
-            if (document.cookie.indexOf('auth_code=') === -1) {
-                window.location.href = '/user/login/';
-            }
-            this.authCode = document.cookie.split('auth_code=')[1].split(';')[0];
-            this.imId = document.cookie.split('im_id=')[1].split(';')[0];
         },
         mounted() {
             const vm = this;
@@ -219,6 +214,11 @@
                             })();
                         }
                         vm.token = vm.server.is_enginetribe ? vm.server.tokens[vm.$i18n.locale] : vm.server.token;
+                        vm.authCode = document.cookie.split(`${vm.server.id}_auth_code`)[1].split(';')[0];
+                        vm.imId = document.cookie.split(`${vm.server.id}_im_id`)[1].split(';')[0];
+                        if (document.cookie.indexOf(`${vm.server.id}_auth_code=`) === -1) {
+                            window.location.href = '/user/login/';
+                        }
                         vm.loadCourseList();
                     }
                 }

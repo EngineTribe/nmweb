@@ -165,11 +165,11 @@
                             alert(vm.$t('message.connection_failed'));
                         } else {
                             const response = JSON.parse(xhr.responseText);
-                            document.cookie = `auth_code=${response.auth_code}; SameSite=Lax; Path=/; Expires=${new Date(Date.now() + 86400000).toUTCString()}`;
-                            document.cookie = `im_id=${response.id}; SameSite=Lax; Path=/; Expires=${new Date(Date.now() + 86400000).toUTCString()}`;
+                            document.cookie = `${vm.server.id}_auth_code=${response.auth_code}; SameSite=Lax; Path=/; Expires=${new Date(Date.now() + 86400000).toUTCString()}`;
+                            document.cookie = `${vm.server.id}_im_id=${response.id}; SameSite=Lax; Path=/; Expires=${new Date(Date.now() + 86400000).toUTCString()}`;
                             vm.responseMessage = vm.$t('message.hello') + vm.username;
                             setTimeout(() => {
-                                window.location.href = '/stages/detailed_search';
+                                window.location.href = `/stages/detailed_search?server=${vm.server.id}`;
                             }, 1000);
                         }
                         vm.loading = false;
