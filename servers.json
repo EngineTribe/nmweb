@@ -3,7 +3,7 @@
     {
       "name": "Engine Tribe",
       "id": "enginetribe",
-      "host": "http://enginetribe.gq:30000",
+      "host": "https://nmweb-rp.enginetribe.gq/http://enginetribe.gq:30000",
       "is_enginetribe": true,
       "tokens": {
         "zh_CN": "SMMWEMBCN",
@@ -14,7 +14,7 @@
     {
       "name": "Engine-bot",
       "id": "enginebot",
-      "host": "http://103.195.101.206:25624",
+      "host": "https://nmweb-rp.enginetribe.gq/http://103.195.101.206:25624",
       "is_enginetribe": false,
       "token": "282041415"
     }
