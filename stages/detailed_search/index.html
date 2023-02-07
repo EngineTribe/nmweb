@@ -169,7 +169,7 @@
                 selectedTab: 3,
                 authCode: '',
                 gameStyleMap: {
-                    0: 'smb', 1: 'smb3', 2: 'smw', 3: 'nsmbu', 4: 'unknown', 5: 'unknown'
+                    0: 'smb', 1: 'smb3', 2: 'smw', 3: 'nsmbu'
                 },
                 environmentMap: {
                     0: 'ground',
@@ -201,11 +201,19 @@
                 this.selectedTab = tab;
             },
             getGameStyleCSS(gamestyle) {
-                return `background: url("/assets/images/gamestyles/${this.gameStyleMap[gamestyle]}.png"); background-size: 100% 100%;`
+                if (this.gameStyleMap.hasOwnProperty(gamestyle)) {
+                    return `background: url("/assets/images/gamestyles/${this.gameStyleMap[gamestyle]}.png"); background-size: 100% 100%;`
+                } else {
+                    return `background: url("/assets/images/gamestyles/unknown.png"); background-size: 100% 100%;`
+                }
             },
             getEnvironmentCSS(gamestyle, environment) {
-                if (this.environmentMap.hasOwnProperty(environment)) {
-                    return `background: url("/assets/images/environments/${this.gameStyleMap[gamestyle]}/${this.environmentMap[environment]}.png"); background-size: 100% 100%;`
+                if (this.gameStyleMap.hasOwnProperty(gamestyle)) {
+                    if (this.environmentMap.hasOwnProperty(environment)) {
+                        return `background: url("/assets/images/environments/${this.gameStyleMap[gamestyle]}/${this.environmentMap[environment]}.png"); background-size: 100% 100%;`
+                    } else {
+                        return `background: url("/assets/images/environments/unknown.png"); background-size: 100% 100%;`
+                    }
                 } else {
                     return `background: url("/assets/images/environments/unknown.png"); background-size: 100% 100%;`
                 }
