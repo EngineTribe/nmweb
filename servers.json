@@ -6,9 +6,9 @@
       "host": "http://enginetribe.gq:30000",
       "is_enginetribe": true,
       "tokens": {
-        "zh_CN": "SMMWEPCCN",
-        "en_US": "SMMWEPCEN",
-        "es_ES": "SMMWEPCES"
+        "zh_CN": "SMMWEMBCN",
+        "en_US": "SMMWEMBEN",
+        "es_ES": "SMMWEMBES"
       }
     },
     {

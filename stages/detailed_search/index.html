@@ -2,11 +2,13 @@
 <html>
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=0.7, user-scalable=no">
     <title>Explore Courses - Course World Web</title>
     <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue-i18n@9/dist/vue-i18n.global.js"></script>
     <link rel="stylesheet" href="/background.css">
     <link rel="stylesheet" href="/fonts.css">
+    <link rel="stylesheet" href="/stages/detailed_search/font.css">
     <link rel="stylesheet" href="/stages/detailed_search/index.css">
     <link rel="stylesheet" href="/rotating.css">
 </head>
@@ -15,16 +17,93 @@
 <div id="app">
     <div class="nm-detailed-search-root">
         <div class="nm-detailed-search-head">
-            <img src="/assets/images/spr_nm_castle.png" class="nm-detailed-search-head-title-logo">
-            <div class="font-regular">
-                {{ $t('title.title') }}
+            <div class="nm-detailed-search-head-item nm-detailed-search-head-item-left">
+                <img draggable="false" src="/assets/images/spr_nm_castle.png" alt="castle">
+                <div class="font-detailed-search nm-detailed-search-head-title">
+                    {{ $t('title.title') }}
+                </div>
+            </div>
+            <div class="nm-detailed-search-head-item nm-detailed-search-head-item-right">
+                <div class="nm-pager" id="pager-left">
+                    <img draggable="false" src="/assets/images/spr_nm_pages_left.png" alt="pager-left">
+                </div>
+                <div class="nm-pager" id="pager-text">
+                    <img draggable="false" src="/assets/images/spr_nm_pages_mask.png" alt="pager-text">
+                    <div class="font-detailed-search">{{pageNum}}</div>
+                </div>
+                <div class="nm-pager" id="pager-right">
+                    <img draggable="false" src="/assets/images/spr_nm_pages_right.png" alt="pager-right">
+                </div>
+                <div class="nm-menu-principal">
+                    <img draggable="false" src="/assets/images/spr_menu.png" alt="menu-principal">
+                </div>
             </div>
         </div>
         <div class="nm-detailed-search-robot">
-            <img src="/assets/images/spr_engine_bot.png" alt="robot" class="rotating-slow">
+            <img draggable="false" src="/assets/images/spr_engine_bot.png" alt="robot" class="rotating-slow">
         </div>
         <div class="planet-3">
-            <img src="/assets/images/spr_nm_planet_3.png" alt="planet-3">
+            <img draggable="false" src="/assets/images/spr_nm_planet_3.png" alt="planet-3">
+        </div>
+
+        <div class="nm-detailed-search-tabs">
+            <div class="nm-tab" :class="{ 'nm-tab-selected' : selectedTab === 1}" @click="switchTab(1)">
+                <img draggable="false" src="/assets/images/spr_nm_tabs.png" alt="tab-featured">
+                <span>{{ $t('title.featured')}}</span>
+            </div>
+            <div class="nm-tab" :class="{ 'nm-tab-selected' : selectedTab === 2}" @click="switchTab(2)">
+                <img draggable="false" src="/assets/images/spr_nm_tabs.png" alt="tab-popular">
+                <span>{{ $t('title.popular')}}</span>
+            </div>
+            <div class="nm-tab" :class="{ 'nm-tab-selected' : selectedTab === 3}" @click="switchTab(3)">
+                <img draggable="false" src="/assets/images/spr_nm_tabs.png" alt="tab-latest">
+                <span>{{ $t('title.latest')}}</span>
+            </div>
+            <div class="nm-tab" :class="{ 'nm-tab-selected' : selectedTab === 4}" @click="switchTab(4)">
+                <img draggable="false" src="/assets/images/spr_nm_tabs.png" alt="tab-search">
+                <span>{{ $t('title.search')}}</span>
+            </div>
+            <div class="nm-tab-clears" :class="{ 'nm-tab-clears-selected' : selectedTab === 5}" @click="switchTab(5)">
+                <img draggable="false" class="nm-tab-clears-img" src="/assets/images/spr_nm_tabs_small.png"
+                     alt="tab-clears">
+                <img draggable="false" class="nm-tab-clears-ministar" src="/assets/images/spr_nm_ministar.png"
+                     alt="tab-clears-ministar">
+            </div>
+        </div>
+
+
+        <div class="nm-bg-grid-root">
+            <div class="nm-bg-grid"></div>
+        </div>
+        <div class="nm-detailed-search-shadow">
+            <img draggable="false" src="/assets/images/spr_nm_shadow.png" alt="shadow">
+        </div>
+
+        <div class="nm-detailed-search-rows">
+            <div v-for="i in [0,1,2,3,4]" class="nm-detailed-search-row">
+                <div class="nm-row-singleline">
+                    <div class="nm-row-gamestyle" :style="getGameStyleCSS(i)"></div>
+                    <div class="nm-row-name">¡Hola, Niveles Mundiales Web! ¡Hola, Niveles Mundiales Web! ¡Hola, Niveles
+                        Mundiales Web!
+                    </div>
+                </div>
+                <div>
+                    <div class="nm-row-environment" :style="getEnvironmentCSS(i, 0)"></div>
+                </div>
+                <div class="nm-row-line nm-row-line1">
+                    <img :src="`/assets/images/nm_icons/like${0 ? 'd' : 's'}.png`" alt="like">
+                    <div>1</div>
+                    <div class="gap"></div>
+                    <img :src="`/assets/images/nm_icons/dislike${0 ? 'd' : 's'}.png`" alt="like">
+                    <div>1</div>
+                </div>
+                <div class="nm-row-line nm-row-line2">
+                    <img :src="`/assets/images/nm_icons/tag.png`" alt="like">
+                    <div>标准</div>
+                    <div>1</div>
+                </div>
+                <div class="nm-row-maker">YidaozhanYa</div>
+            </div>
         </div>
     </div>
 </div>
@@ -41,7 +120,11 @@
                 title: 'Explore Courses - Course World Web'
             },
             title: {
-                title: "Explore Courses"
+                title: 'Explore Courses',
+                featured: 'Featured',
+                popular: 'Popular',
+                latest: 'Latest',
+                search: 'Search',
             },
             message: {
                 connection_failed: 'Connection failed',
@@ -52,7 +135,11 @@
                 title: 'Explorar Niveles - Niveles Mundiales Web'
             },
             title: {
-                title: "Explorar Niveles"
+                title: 'Explorar Niveles',
+                featured: 'Prometedores',
+                popular: 'Populares',
+                latest: 'Novedades',
+                search: 'Busqueda',
             },
             message: {
                 connection_failed: 'Conexión fallida',
@@ -63,7 +150,11 @@
                 title: '浏览关卡 - 全球关卡网页版'
             },
             title: {
-                title: "浏览关卡"
+                title: '浏览关卡',
+                featured: '精选',
+                popular: '热门',
+                latest: '最新',
+                search: '搜索',
             },
             message: {
                 connection_failed: '连接失败',
@@ -72,10 +163,52 @@
     }
 
     const vm = createApp({
+        data() {
+            return {
+                pageNum: 1,
+                selectedTab: 3,
+                authCode: '',
+                gameStyleMap: {
+                    0: 'smb', 1: 'smb3', 2: 'smw', 3: 'nsmbu', 4: 'unknown', 5: 'unknown'
+                },
+                environmentMap: {
+                    0: 'ground',
+                    1: 'underground',
+                    2: 'castle',
+                    3: 'underwater',
+                    4: 'ghost',
+                    5: 'airship',
+                    6: 'forest',
+                    7: 'sky',
+                    8: 'desert',
+                    9: 'snow',
+                    10: 'fall',
+                    11: 'beach',
+                    12: 'mountain',
+                    13: 'volcano'
+                }
+            }
+        },
         created() {
             document.title = this.$t('page.title');
             if (document.cookie.indexOf('auth_code=') === -1) {
                 window.location.href = '/user/login/';
+            }
+            this.authCode = document.cookie.split('auth_code=')[1].split(';')[0];
+        },
+        methods: {
+            switchTab(tab) {
+                this.selectedTab = tab;
+            },
+            getGameStyleCSS(gamestyle) {
+                return `background: url("/assets/images/gamestyles/${this.gameStyleMap[gamestyle]}.png"); background-size: 100% 100%;`
+            },
+            getEnvironmentCSS(gamestyle, environment) {
+                if (this.environmentMap.hasOwnProperty(environment)) {
+                    return `background: url("/assets/images/environments/${this.gameStyleMap[gamestyle]}/${this.environmentMap[environment]}.png"); background-size: 100% 100%;`
+                } else {
+                    return `background: url("/assets/images/environments/unknown.png"); background-size: 100% 100%;`
+                }
             }
         }
     });
