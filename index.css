@@ -60,6 +60,7 @@
 .nm-button-big {
     display: flex;
     flex-direction: column;
+    cursor: pointer;
 }
 
 .nm-button-big > img {
@@ -81,4 +82,28 @@
     float: bottom;
     position: absolute;
     bottom: 5vh;
+}
+
+
+.nm-detailed-search-robot {
+    position: absolute;
+    top: 3vh;
+    right: 25vw;
+    animation: slide-robot 4s linear infinite;
+}
+
+.nm-detailed-search-robot > img {
+    height: 15vh;
+}
+
+@keyframes slide-robot {
+    0% {
+        transform: translate3d(0, 0, 0);
+    }
+    50% {
+        transform: translate3d(0, -5vh, 0);
+    }
+    100% {
+        transform: translate3d(0, 0, 0);
+    }
 }

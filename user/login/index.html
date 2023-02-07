@@ -165,7 +165,7 @@
                             alert(vm.$t('message.connection_failed'));
                         } else {
                             const response = JSON.parse(xhr.responseText);
-                            document.cookie = `auth_code=${response.auth_code}; SameSite=Lax; Path=/; Secure`;
+                            document.cookie = `auth_code=${response.auth_code}; SameSite=Lax; Path=/; Secure; Expires=${new Date(Date.now() + 86400000).toUTCString()}`;
                             vm.responseMessage = vm.$t('message.hello') + response.username;
                             setTimeout(() => {
                                 window.location.href = '/stages/detailed_search';

@@ -1,4 +1,4 @@
-html,body {
+html, body {
     height: 100%;
     width: 100%;
     margin: 0;
@@ -31,4 +31,33 @@ html,body {
 
 .nm-detailed-search-head > img {
     height: 3vh;
+}
+
+.nm-detailed-search-robot {
+    position: absolute;
+    top: 3vh;
+    animation: slide-robot 4s linear infinite;
+}
+
+.nm-detailed-search-robot > img {
+    height: 15vh;
+    filter: brightness(60%) saturate(80%);
+}
+
+@keyframes slide-robot {
+    0% {
+        transform: translate3d(0, 0, 0);
+    }
+    50% {
+        transform: translate3d(0, -5vh, 0);
+    }
+    100% {
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+.planet-3 {
+    position: absolute;
+    top: 7vh;
+    left: 30vw;
 }

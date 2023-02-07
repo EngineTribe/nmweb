@@ -33,3 +33,11 @@
   -o-animation: rotating 1s linear infinite;
   animation: rotating 1s linear infinite;
 }
+
+.rotating-slow {
+  -webkit-animation: rotating 7s linear infinite;
+  -moz-animation: rotating 7s linear infinite;
+  -ms-animation: rotating 7s linear infinite;
+  -o-animation: rotating 7s linear infinite;
+  animation: rotating 7s linear infinite;
+}
