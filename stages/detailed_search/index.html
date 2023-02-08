@@ -214,11 +214,11 @@
                             })();
                         }
                         vm.token = vm.server.is_enginetribe ? vm.server.tokens[vm.$i18n.locale] : vm.server.token;
-                        vm.authCode = document.cookie.split(`${vm.server.id}_auth_code`)[1].split(';')[0];
-                        vm.imId = document.cookie.split(`${vm.server.id}_im_id`)[1].split(';')[0];
                         if (document.cookie.indexOf(`${vm.server.id}_auth_code=`) === -1) {
                             window.location.href = '/user/login/';
                         }
+                        vm.authCode = document.cookie.split(`${vm.server.id}_auth_code`)[1].split(';')[0];
+                        vm.imId = document.cookie.split(`${vm.server.id}_im_id`)[1].split(';')[0];
                         vm.loadCourseList();
                     }
                 }
@@ -251,6 +251,7 @@
                 const xhr = new XMLHttpRequest();
                 xhr.open('POST', vm.server.host + '/stages/detailed_search', true);
                 xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                xhr.setRequestHeader('User-Agent', 'GameMaker HTTP')
                 xhr.send(
                     'auth_code=' + vm.authCode +
                     '&discord_id=' + vm.imId +
@@ -259,11 +260,11 @@
                 xhr.onreadystatechange = () => {
                     if (xhr.readyState === 4) {
                         if (xhr.status !== 200) {
-                            alert(vm.$t('message.connection_failed'));
+                            alert(vm.$t('message.connection_failed') + '\n' + xhr.status);
                         } else {
                             const response = JSON.parse(xhr.responseText);
                             if (response.hasOwnProperty('error_type')) {
-                                alert(response.message);
+                                alert(response.error_type + ' - ' + response.message);
                             } else {
                                 vm.courseList = response.result;
                             }
