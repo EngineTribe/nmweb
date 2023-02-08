@@ -34,7 +34,7 @@ function loadServers(vm, selectedServerId, callback) {
     }
 }
 
-function smmweApi(vm, api, args, callback) {
+function smmweApi(vm, api, args, callback, failed_callback) {
     const xhr = new XMLHttpRequest();
     xhr.open('POST', vm.server.host + api, true);
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
@@ -66,6 +66,9 @@ function smmweApi(vm, api, args, callback) {
                     ) {
                         Cookies.delete(`${vm.server.id}_auth_code`);
                         window.location.href = '/user/login/';
+                    }
+                    if (typeof failed_callback === 'function') {
+                        failed_callback(vm, response);
                     }
                     alert(
                         vm.$t('message.connection_failed') + '\n' +

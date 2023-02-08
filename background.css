@@ -21,7 +21,7 @@ html,body {
 .sliding-background {
     height: inherit;
     width: calc(100vh * 5.3328);
-    background: url("/assets/images/bg_super_experto.png") repeat-x;
+    background: url("/assets/images/bg/super_experto.png") repeat-x;
     background-size: contain;
     animation: slide 18s linear infinite;
     z-index: -100;

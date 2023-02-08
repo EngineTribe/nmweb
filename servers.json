@@ -1,6 +1,13 @@
 {
   "servers": [
     {
+      "name": "Engine-bot",
+      "id": "enginebot",
+      "host": "https://nmweb-rp.enginetribe.gq/http://ek.enginetribe.gq:25624",
+      "is_enginetribe": false,
+      "token": "282041415"
+    },
+    {
       "name": "Engine Tribe",
       "id": "enginetribe",
       "host": "https://nmweb-rp.enginetribe.gq/http://enginetribe.gq:30000",
@@ -10,13 +17,6 @@
         "en_US": "SMMWEMBEN",
         "es_ES": "SMMWEMBES"
       }
-    },
-    {
-      "name": "Engine-bot",
-      "id": "enginebot",
-      "host": "https://nmweb-rp.enginetribe.gq/http://ek.enginetribe.gq:25624",
-      "is_enginetribe": false,
-      "token": "282041415"
     }
   ]
 }

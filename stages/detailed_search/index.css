@@ -4,7 +4,7 @@ html, body {
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-image: url("/assets/images/bg_super_experto.png");
+    background-image: url("/assets/images/bg/super_experto.png");
     background-size: cover;
 }
 
@@ -204,7 +204,7 @@ img {
     overflow: hidden;
     width: 300%;
     height: 300%;
-    background: url("/assets/images/bg_nm_grid.png") repeat;
+    background: url("/assets/images/bg/nm_grid.png") repeat;
     animation: slide-grid 20s linear infinite;
 }
 
@@ -322,7 +322,7 @@ img {
 
 .nm-row-maker {
     position: relative;
-    top: -7rem;
+    top: -11rem;
     left: min(64rem, 64vw);
     max-width: min(20rem, 20vw);
     height: 2rem;
@@ -334,6 +334,47 @@ img {
 
 .nm-detailed-search-row:hover > .nm-row-maker {
     left: min(66rem, 66vw);
+}
+
+.nm-row-cleared {
+    position: relative;
+    top: -15rem;
+    left: min(64rem, 64vw);
+    max-width: min(20rem, 20vw);
+    transition: left 0.2s ease-in-out;
+    height: 2rem;
+    flex-basis: 2rem;
+    flex-shrink: 0;
+    text-align: right;
+}
+
+
+.nm-row-cleared > img {
+    width: 2rem;
+}
+
+.nm-detailed-search-row:hover > .nm-row-cleared {
+    left: min(66rem, 66vw);
+}
+
+.nm-row-featured {
+    position: relative;
+    top: -17rem;
+    left: min(61rem, 61vw);
+    max-width: min(20rem, 20vw);
+    transition: left 0.2s ease-in-out;
+    height: 2rem;
+    flex-basis: 2rem;
+    flex-shrink: 0;
+    text-align: right;
+}
+
+.nm-row-featured > img {
+    width: 2rem;
+}
+
+.nm-detailed-search-row:hover > .nm-row-featured {
+    left: min(63rem, 63vw);
 }
 
 
@@ -351,4 +392,147 @@ img {
 
 .nm-detailed-search-loading > img {
     width: 4rem;
+}
+
+
+.nm-detailed-search-details {
+    z-index: 300;
+    max-width: 85rem;
+    width: min(85rem, 85vw);
+    height: calc(100vh - 20rem);
+    margin-top: 3rem;
+    padding-bottom: 1rem;
+    overflow-x: hidden;
+    overflow-y: visible;
+
+    background-color: #fdfeee;
+}
+
+
+.nm-row-line3 {
+    position: relative;
+    top: -8.2rem;
+    left: 1.2rem;
+}
+
+.nm-details-blocks {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: min(85rem, 85vw);
+    position: relative;
+    top: -5rem;
+    height: 10rem;
+    gap: min(1.5rem, 1.5vw);
+}
+
+.nm-details-block {
+    width: calc(calc(min(83rem, 83vw) / 3) - 1rem);
+    background-color: #fef3d3;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.7rem;
+}
+
+.nm-details-block div {
+    text-align: center;
+}
+
+.nm-details-block div.props_name {
+    color: #a97c6e
+}
+
+.nm-details-clear-rate {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.7rem
+}
+
+.nm-details-clear-rate-line {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 0.5rem;
+    position: relative;
+    left: -0.5rem;
+}
+
+.nm-details-clear-rate-line img {
+    width: 2rem;
+    height: 2rem;
+    position: relative;
+    top: 0.5rem;
+}
+
+
+.nm-details-cleared {
+    position: relative;
+    top: -15rem;
+    left: min(58rem, 58vw);
+    max-width: min(20rem, 20vw);
+    transition: left 0.2s ease-in-out;
+    height: 2rem;
+    flex-basis: 2rem;
+    flex-shrink: 0;
+    text-align: right;
+}
+
+
+.nm-details-cleared > img {
+    width: 2rem;
+}
+
+
+.nm-details-featured {
+    position: relative;
+    top: -17rem;
+    left: min(55rem, 55vw);
+    max-width: min(20rem, 20vw);
+    transition: left 0.2s ease-in-out;
+    height: 2rem;
+    flex-basis: 2rem;
+    flex-shrink: 0;
+    text-align: right;
+}
+
+.nm-details-featured > img {
+    width: 2rem;
+}
+
+
+.nm-details-back {
+    position: relative;
+    top: -33rem;
+    left: min(64rem, 64vw);
+    max-width: min(20rem, 20vw);
+    transition: left 0.2s ease-in-out;
+    height: 2rem;
+    flex-basis: 2rem;
+    flex-shrink: 0;
+    text-align: right;
+}
+
+.nm-details-back > img {
+    width: 3.5rem;
+}
+
+.nm-buttons-bottom {
+    position: absolute;
+    top: 48.5rem;
+    width: min(84rem, 84vw);
+    text-align: right;
+}
+
+.nm-buttons-bottom img {
+    height: 5rem;
+}
+
+.nm-buttons-bottom-download {
+    position: relative;
+    top: -4rem;
+    width: 16rem;
+    text-align: center;
+    left: calc(min(84rem, 84vw) - 16rem);
 }

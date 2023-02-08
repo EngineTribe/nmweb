@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>Course World Web</title>
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
     <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue-i18n@9/dist/vue-i18n.global.js"></script>
     <link rel="stylesheet" href="/background.css">
@@ -15,13 +16,13 @@
 <div class="sliding-background-root">
     <div class="sliding-background"></div>
     <div class="planet-1">
-        <img src="/assets/images/spr_nm_planet_1.png" alt="planet-1">
+        <img src="/assets/images/planet/1.png" alt="planet-1">
     </div>
     <div class="planet-2">
-        <img src="/assets/images/spr_nm_planet_2.png" alt="planet-2">
+        <img src="/assets/images/planet/2.png" alt="planet-2">
     </div>
     <div class="planet-3">
-        <img src="/assets/images/spr_nm_planet_3.png" alt="planet-3">
+        <img src="/assets/images/planet/3.png" alt="planet-3">
     </div>
     <div class="nm-detailed-search-robot">
         <img src="/assets/images/spr_nm_robot.png" alt="robot" class="rotating-slow">
@@ -31,22 +32,22 @@
     <div class="nm-buttons">
         <div class="nm-button-big-root">
             <div class="nm-button-big" id="nm-button-1" @click="jump_to_explore_courses">
-                <img draggable="false" src="assets/images/spr_nm_buttons_big_1.png" alt="Explore Courses">
+                <img draggable="false" src="assets/images/buttons_big/1.png" alt="Explore Courses">
                 <span class="font-regular">{{ $t("title.explore_courses") }}</span>
             </div>
             <div class="nm-button-big" id="nm-button-2">
-                <img draggable="false" src="assets/images/spr_nm_buttons_big_2.png" alt="Ninji Speedruns">
+                <img draggable="false" src="assets/images/buttons_big/2.png" alt="Ninji Speedruns">
                 <span class="font-regular">{{ $t("title.ninji_speedruns") }}</span>
             </div>
         </div>
         <div class="nm-title font-big"> {{ $t("title.title") }}</div>
         <div class="nm-button-big-root">
             <div class="nm-button-big" id="nm-button-3">
-                <img draggable="false" src="assets/images/spr_nm_buttons_big_3.png" alt="Multiplayer">
+                <img draggable="false" src="assets/images/buttons_big/3.png" alt="Multiplayer">
                 <span class="font-regular">{{ $t("title.multiplayer") }}</span>
             </div>
             <div class="nm-button-big" id="nm-button-4">
-                <img draggable="false" src="assets/images/spr_nm_buttons_big_4.png" alt="Super Mario Challenge">
+                <img draggable="false" src="assets/images/buttons_big/4.png" alt="Super Mario Challenge">
                 <span class="font-regular">{{ $t("title.super_mario_challenge") }}</span>
             </div>
         </div>

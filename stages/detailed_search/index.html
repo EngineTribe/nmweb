@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=0.7, user-scalable=no">
     <title>Explore Courses - Course World Web</title>
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
     <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue-i18n@9/dist/vue-i18n.global.js"></script>
     <link rel="stylesheet" href="/background.css">
@@ -45,7 +46,7 @@
             <img draggable="false" src="/assets/images/spr_engine_bot.png" alt="robot" class="rotating-slow">
         </div>
         <div class="planet-3">
-            <img draggable="false" src="/assets/images/spr_nm_planet_3.png" alt="planet-3">
+            <img draggable="false" src="/assets/images/planet/3.png" alt="planet-3">
         </div>
 
         <div class="nm-detailed-search-tabs">
@@ -85,8 +86,9 @@
             <img draggable="false" class="rotating" src="/assets/images/spr_load_image_white.png" alt="loading">
         </div>
 
-        <div v-if="viewMode" class="nm-detailed-search-rows">
-            <div v-for="course in courseList" class="nm-detailed-search-row">
+        <div v-if="viewMode===1" class="nm-detailed-search-rows">
+            <div v-for="(course, idx) in courseList" class="nm-detailed-search-row" :data-row-idx="idx"
+                 @click="showDetails(idx)">
                 <div class="nm-row-singleline">
                     <div class="nm-row-gamestyle" :style="getGameStyleCSS(course.apariencia)"></div>
                     <div class="nm-row-name font-detailed-search">{{course.name}}</div>
@@ -94,19 +96,120 @@
                 <div>
                     <div class="nm-row-environment" :style="getEnvironmentCSS(course.apariencia, course.entorno)"></div>
                 </div>
-                <div class="nm-row-line nm-row-line1">
+                <div class="nm-row-line nm-row-line1" v-if="timerValue===0">
                     <img :src="`/assets/images/nm_icons/like${course.user_data.liked===0 ? 'd' : 's'}.png`" alt="like">
                     <div class="font-detailed-search">{{course.likes}}</div>
                     <div class="gap"></div>
+                    <img src="/assets/images/nm_icons/plays.png" alt="plays">
+                    <div class="font-detailed-search">{{course.intentos}}</div>
+                </div>
+                <div class="nm-row-line nm-row-line1" v-if="timerValue===1">
                     <img :src="`/assets/images/nm_icons/dislike${course.user_data.liked===1 ? 'd' : 's'}.png`"
-                         alt="like">
+                         alt="dislike">
                     <div class="font-detailed-search">{{course.dislikes}}</div>
+                    <div class="gap"></div>
+                    <img src="/assets/images/nm_icons/plays.png" alt="plays">
+                    <div class="font-detailed-search">{{course.intentos}}</div>
                 </div>
                 <div class="nm-row-line nm-row-line2">
-                    <img :src="`/assets/images/nm_icons/tag.png`" alt="like">
+                    <img src="/assets/images/nm_icons/tag.png" alt="tags">
                     <div class="font-detailed-search">{{course.etiquetas}}</div>
                 </div>
+                <div class="nm-row-cleared">
+                    <img src="/assets/images/nm_icons/cleared.png" alt="cleared"
+                         v-if="course.user_data.completed==='yes'">
+                </div>
+                <div class="nm-row-featured">
+                    <img src="/assets/images/nm_icons/featured.png" alt="featured"
+                         v-if="course.featured===1">
+                </div>
                 <div class="nm-row-maker font-detailed-search">{{course.author}}</div>
+            </div>
+        </div>
+        <div class="nm-detailed-search-details">
+            <div class="nm-row-singleline">
+                <div class="nm-row-gamestyle" :style="getGameStyleCSS(selectedCourse['apariencia'])"></div>
+                <div class="nm-row-name font-detailed-search">{{selectedCourse['name']}}</div>
+            </div>
+            <div>
+                <div class="nm-row-environment"
+                     :style="getEnvironmentCSS(selectedCourse['apariencia'],selectedCourse['entorno'])"></div>
+            </div>
+            <div class="nm-row-line nm-row-line1" v-if="timerValue===0">
+                <img :src="`/assets/images/nm_icons/like${selectedCourse['user_data']['liked']===0 ? 'd' : 's'}.png`"
+                     alt="like">
+                <div class="font-detailed-search">{{selectedCourse['likes']}}</div>
+                <div class="gap"></div>
+                <img src="/assets/images/nm_icons/plays.png" alt="plays">
+                <div class="font-detailed-search">{{selectedCourse['intentos']}}</div>
+            </div>
+            <div class="nm-row-line nm-row-line1" v-if="timerValue===1">
+                <img :src="`/assets/images/nm_icons/dislike${selectedCourse['user_data']['liked']===1 ? 'd' : 's'}.png`"
+                     alt="dislike">
+                <div class="font-detailed-search">{{selectedCourse['dislikes']}}</div>
+                <div class="gap"></div>
+                <img src="/assets/images/nm_icons/plays.png" alt="plays">
+                <div class="font-detailed-search">{{selectedCourse['intentos']}}</div>
+            </div>
+            <div class="nm-row-line nm-row-line2">
+                <img src="/assets/images/nm_icons/tag.png" alt="tags">
+                <div class="font-detailed-search">{{selectedCourse['etiquetas']}}</div>
+            </div>
+            <div class="nm-details-cleared">
+                <img src="/assets/images/nm_icons/cleared.png" alt="cleared"
+                     v-if="selectedCourse['user_data']['completed']==='yes'">
+            </div>
+            <div class="nm-details-featured">
+                <img src="/assets/images/nm_icons/featured.png" alt="featured"
+                     v-if="selectedCourse['featured']===1">
+            </div>
+            <div class="nm-row-maker font-detailed-search">{{selectedCourse['author']}}</div>
+            <div class="nm-row-line nm-row-line3 font-detailed-search">
+                {{selectedCourse['date']}}
+            </div>
+            <div class="nm-details-blocks">
+                <div class="nm-details-block">
+                    <div class="font-detailed-search props_name">{{$t("title.record")}}</div>
+
+                    <div class="font-detailed-search" v-if="selectedCourse['record']['record']==='no'">
+                        {{$t("title.no_record")}}
+                    </div>
+                    <div class="font-detailed-search" v-if="selectedCourse['record']['record']==='yes'">
+                        {{selectedCourse['record']['alias']}}
+                    </div>
+                    <div class="font-detailed-search" v-if="selectedCourse['record']['record']==='yes'">
+                        {{recordTime(selectedCourse['record']['time'])}}
+                    </div>
+                </div>
+                <div class="nm-details-block">
+                    <div class="font-detailed-search props_name">{{$t("title.clears")}}</div>
+                    <div class="font-detailed-search" v-if="timerValue===0">
+                        {{(selectedCourse['victorias'] / selectedCourse['intentos'] * 100).toFixed(2)}}%
+                    </div>
+                    <div class="nm-details-clear-rate" v-if="timerValue===1">
+                        <div class="nm-details-clear-rate-line">
+                            <img src="/assets/images/nm_icons/clears.png" alt="clears">
+                            <div class="font-detailed-search">{{selectedCourse['victorias']}}</div>
+                        </div>
+                        <div class="nm-details-clear-rate-line">
+                            <img src="/assets/images/nm_icons/plays.png" alt="plays">
+                            <div class="font-detailed-search">{{selectedCourse['intentos']}}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="nm-details-block">
+                    <div class="font-detailed-search props_name">{{$t("title.course_id")}}</div>
+                    <div class="font-detailed-search">{{selectedCourse['id']}}</div>
+                </div>
+            </div>
+            <div class="nm-buttons-bottom" v-if="viewMode===2">
+                <a :href="selectedCourse['archivo']">
+                <img src="/assets/images/nm_buttons/download.png" alt="download">
+                <div class="nm-buttons-bottom-download font-detailed-search">{{$t("title.download")}}</div>
+                </a>
+            </div>
+            <div class="nm-details-back" @click="viewMode=1;">
+                <img src="/assets/images/nm_icons/back_to_list.png" alt="tags">
             </div>
         </div>
     </div>
@@ -128,6 +231,11 @@
                 popular: 'Popular',
                 latest: 'Latest',
                 search: 'Search',
+                record: 'Record',
+                clears: 'Clears',
+                course_id: 'Course ID',
+                download: 'Download',
+                no_record: 'No Record',
             },
             message: {
                 connection_failed: 'Connection failed',
@@ -143,6 +251,11 @@
                 popular: 'Populares',
                 latest: 'Novedades',
                 search: 'Busqueda',
+                record: 'Record',
+                clears: 'Victorias',
+                course_id: 'ID del Nivel',
+                download: 'Descargar',
+                no_record: 'Sin Record',
             },
             message: {
                 connection_failed: 'Conexión fallida',
@@ -158,6 +271,11 @@
                 popular: '热门',
                 latest: '最新',
                 search: '搜索',
+                record: '纪录',
+                clears: '通关率',
+                course_id: '关卡 ID',
+                download: '下载',
+                no_record: '无纪录',
             },
             message: {
                 connection_failed: '连接失败',
@@ -174,6 +292,8 @@
                 loadingState: 0,
                 selectedTab: 3,
                 viewMode: 1,
+                timer: '',
+                timerValue: 0,
                 token: '',
                 authCode: '',
                 gameStyleMap: {
@@ -196,11 +316,16 @@
                     13: 'volcano'
                 },
                 tabMap: {
-                    0: {'featured': 'promising'},
-                    1: {'featured': 'notpromising', 'sort': 'popular', 'last': '7d'},
-                    2: {}
+                    1: {'featured': 'promising'},
+                    2: {'featured': 'notpromising', 'sort': 'popular', 'last': '7d'},
+                    3: {},
+                    5: {'historial': '0'}
                 },
-                courseList: {}
+                courseList: {},
+                selectedCourse: {
+                    'record': {},
+                    'user_data': {}
+                }
             }
         },
         created() {
@@ -208,6 +333,11 @@
         },
         mounted() {
             const vm = this;
+            vm.timer = setInterval(() => {
+                ((vm) => {
+                    vm.timerValue = vm.timerValue ? 0 : 1;
+                })(vm);
+            }, 5000);
             loadServers(
                 vm,
                 urlParams.get('server'),
@@ -218,6 +348,9 @@
         },
         methods: {
             switchTab(tab) {
+                if (vm.loadingState === 1) {
+                    return;
+                }
                 this.selectedTab = tab;
                 this.pageNum = 1;
                 if (this.tabMap.hasOwnProperty(tab)) {
@@ -246,6 +379,7 @@
             loadCourseList() {
                 const vm = this;
                 vm.courseList = [];
+                vm.viewMode = 1;
                 vm.loadingState = 1;
                 smmweApi(
                     vm,
@@ -259,6 +393,9 @@
                         vm.courseList = response.result;
                         vm.pageCount = response.pages;
                     },
+                    (vm, response) => {
+                        vm.loadingState = 0;
+                    }
                 )
             },
             nextPage() {
@@ -271,6 +408,18 @@
                     this.pageNum--;
                 this.loadCourseList();
             },
+            showDetails(idx) {
+                const vm = this;
+                vm.selectedCourse = vm.courseList[idx];
+                vm.viewMode = 2;
+                console.log(vm.selectedCourse)
+            },
+            recordTime(time) {
+                const milliseconds = time.slice(-3);
+                const seconds = time.slice(0, -3);
+                const minutes = Math.floor(seconds / 60);
+                return `${minutes}:${seconds % 60}.${milliseconds}`;
+            }
         }
     });
 
