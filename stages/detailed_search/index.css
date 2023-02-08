@@ -232,7 +232,6 @@ img {
     overflow-y: visible;
 }
 
-
 .nm-detailed-search-row {
     position: relative;
     left: min(2.5rem, 2.5vw);
@@ -335,4 +334,21 @@ img {
 
 .nm-detailed-search-row:hover > .nm-row-maker {
     left: min(66rem, 66vw);
+}
+
+
+.nm-detailed-search-loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.nm-detailed-search-loading > img {
+    width: 4rem;
 }

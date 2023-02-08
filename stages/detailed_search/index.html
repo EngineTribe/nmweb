@@ -25,14 +25,14 @@
                 </div>
             </div>
             <div class="nm-detailed-search-head-item nm-detailed-search-head-item-right">
-                <div class="nm-pager" id="pager-left">
+                <div class="nm-pager" id="pager-left" @click="prevPage()">
                     <img draggable="false" src="/assets/images/spr_nm_pages_left.png" alt="pager-left">
                 </div>
                 <div class="nm-pager" id="pager-text">
                     <img draggable="false" src="/assets/images/spr_nm_pages_mask.png" alt="pager-text">
                     <div class="font-detailed-search-white">{{pageNum}}</div>
                 </div>
-                <div class="nm-pager" id="pager-right">
+                <div class="nm-pager" id="pager-right" @click="nextPage()">
                     <img draggable="false" src="/assets/images/spr_nm_pages_right.png" alt="pager-right">
                 </div>
                 <div class="nm-menu-principal">
@@ -40,6 +40,7 @@
                 </div>
             </div>
         </div>
+
         <div class="nm-detailed-search-robot">
             <img draggable="false" src="/assets/images/spr_engine_bot.png" alt="robot" class="rotating-slow">
         </div>
@@ -80,7 +81,11 @@
             <img draggable="false" src="/assets/images/spr_nm_shadow.png" alt="shadow">
         </div>
 
-        <div class="nm-detailed-search-rows">
+        <div class="nm-detailed-search-loading" v-if="loadingState">
+            <img draggable="false" class="rotating" src="/assets/images/spr_load_image_white.png" alt="loading">
+        </div>
+
+        <div v-if="viewMode" class="nm-detailed-search-rows">
             <div v-for="course in courseList" class="nm-detailed-search-row">
                 <div class="nm-row-singleline">
                     <div class="nm-row-gamestyle" :style="getGameStyleCSS(course.apariencia)"></div>
@@ -164,6 +169,9 @@
         data() {
             return {
                 pageNum: 1,
+                pageCount: 1,
+                queryArgs: {},
+                loadingState: 0,
                 selectedTab: 3,
                 viewMode: 1,
                 token: '',
@@ -187,6 +195,11 @@
                     12: 'mountain',
                     13: 'volcano'
                 },
+                tabMap: {
+                    0: {'featured': 'promising'},
+                    1: {'featured': 'notpromising', 'sort': 'popular', 'last': '7d'},
+                    2: {}
+                },
                 courseList: {}
             }
         },
@@ -206,6 +219,11 @@
         methods: {
             switchTab(tab) {
                 this.selectedTab = tab;
+                this.pageNum = 1;
+                if (this.tabMap.hasOwnProperty(tab)) {
+                    this.queryArgs = this.tabMap[tab];
+                    this.loadCourseList();
+                }
             },
             getGameStyleCSS(gamestyle) {
                 if (this.gameStyleMap.hasOwnProperty(gamestyle)) {
@@ -227,15 +245,32 @@
             },
             loadCourseList() {
                 const vm = this;
+                vm.courseList = [];
+                vm.loadingState = 1;
                 smmweApi(
                     vm,
                     '/stages/detailed_search',
-                    {},
+                    {
+                        page: vm.pageNum,
+                        ...vm.queryArgs
+                    },
                     (vm, response) => {
+                        vm.loadingState = 0;
                         vm.courseList = response.result;
+                        vm.pageCount = response.pages;
                     },
                 )
-            }
+            },
+            nextPage() {
+                if (this.pageNum < this.pageCount)
+                    this.pageNum++;
+                this.loadCourseList();
+            },
+            prevPage() {
+                if (this.pageNum > 1)
+                    this.pageNum--;
+                this.loadCourseList();
+            },
         }
     });
 
