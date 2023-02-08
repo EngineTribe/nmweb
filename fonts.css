@@ -9,19 +9,10 @@
 }
 
 @font-face {
-    font-family: 'AsepriteFont';
-    src: url('/assets/fonts/AsepriteFont.ttf');
+    font-family: 'EngineTribe';
+    src: url('/assets/fonts/EngineTribe-Regular.ttf');
 }
 
-@font-face {
-    font-family: 'DinkieBitmap';
-    src: url('/assets/fonts/DinkieBitmap.woff2');
-}
-
-@font-face {
-    font-family: 'GuanZhi 8px';
-    src: url('/assets/fonts/GuanZhi_8px.ttf');
-}
 
 .font-big {
     font-family: 'Super Mario Maker 2', 'DFPZongYiW7-GB', sans-serif;
@@ -29,15 +20,26 @@
     font-size: 5vh;
 }
 
-
-.font-index-regular {
-    font-family: 'DinkieBitmap', 'GuanZhi 8px', sans-serif;
+.font-regular {
+    font-family: 'EngineTribe', sans-serif;
     color: white;
-    font-size: 3.5vh;
+    font-size: 5vh;
 }
 
-.font-regular {
-    font-family: 'DinkieBitmap', 'GuanZhi 8px', sans-serif;
+.font-detailed-search-white {
+    font-family: 'EngineTribe', sans-serif;
     color: white;
-    font-size: 3vh;
+    font-size: 3rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.font-detailed-search {
+    font-family: 'EngineTribe', sans-serif;
+    color: #590f10;
+    font-size: 3rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }

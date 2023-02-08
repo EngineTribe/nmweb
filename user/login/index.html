@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="/fonts.css">
     <link rel="stylesheet" href="/rotating.css">
     <link rel="stylesheet" href="/user/login/index.css">
+    <script src="/scripts/cookies.js"></script>
 </head>
 <body>
 <!-- Sliding background -->
@@ -165,8 +166,8 @@
                             alert(vm.$t('message.connection_failed'));
                         } else {
                             const response = JSON.parse(xhr.responseText);
-                            document.cookie = `${vm.server.id}_auth_code=${response.auth_code}; SameSite=Lax; Path=/; Expires=${new Date(Date.now() + 86400000).toUTCString()}`;
-                            document.cookie = `${vm.server.id}_im_id=${response.id}; SameSite=Lax; Path=/; Expires=${new Date(Date.now() + 86400000).toUTCString()}`;
+                            Cookies.set(`${vm.server.id}_auth_code`, response.auth_code, 1);
+                            Cookies.set(`${vm.server.id}_im_id`, response.id, 1);
                             vm.responseMessage = vm.$t('message.hello') + vm.username;
                             setTimeout(() => {
                                 window.location.href = `/stages/detailed_search?server=${vm.server.id}`;

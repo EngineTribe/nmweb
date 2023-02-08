@@ -8,9 +8,10 @@
     <script src="https://cdn.jsdelivr.net/npm/vue-i18n@9/dist/vue-i18n.global.js"></script>
     <link rel="stylesheet" href="/background.css">
     <link rel="stylesheet" href="/fonts.css">
-    <link rel="stylesheet" href="/stages/detailed_search/font.css">
     <link rel="stylesheet" href="/stages/detailed_search/index.css">
     <link rel="stylesheet" href="/rotating.css">
+    <script src="/scripts/cookies.js"></script>
+    <script src="/scripts/api.js"></script>
 </head>
 
 <body>
@@ -19,7 +20,7 @@
         <div class="nm-detailed-search-head">
             <div class="nm-detailed-search-head-item nm-detailed-search-head-item-left">
                 <img draggable="false" src="/assets/images/spr_nm_castle.png" alt="castle">
-                <div class="font-detailed-search nm-detailed-search-head-title">
+                <div class="font-detailed-search-white nm-detailed-search-head-title">
                     {{ $t('title.title') }}
                 </div>
             </div>
@@ -29,7 +30,7 @@
                 </div>
                 <div class="nm-pager" id="pager-text">
                     <img draggable="false" src="/assets/images/spr_nm_pages_mask.png" alt="pager-text">
-                    <div class="font-detailed-search">{{pageNum}}</div>
+                    <div class="font-detailed-search-white">{{pageNum}}</div>
                 </div>
                 <div class="nm-pager" id="pager-right">
                     <img draggable="false" src="/assets/images/spr_nm_pages_right.png" alt="pager-right">
@@ -49,19 +50,19 @@
         <div class="nm-detailed-search-tabs">
             <div class="nm-tab" :class="{ 'nm-tab-selected' : selectedTab === 1}" @click="switchTab(1)">
                 <img draggable="false" src="/assets/images/spr_nm_tabs.png" alt="tab-featured">
-                <span>{{ $t('title.featured')}}</span>
+                <span class="font-regular">{{ $t('title.featured')}}</span>
             </div>
             <div class="nm-tab" :class="{ 'nm-tab-selected' : selectedTab === 2}" @click="switchTab(2)">
                 <img draggable="false" src="/assets/images/spr_nm_tabs.png" alt="tab-popular">
-                <span>{{ $t('title.popular')}}</span>
+                <span class="font-regular">{{ $t('title.popular')}}</span>
             </div>
             <div class="nm-tab" :class="{ 'nm-tab-selected' : selectedTab === 3}" @click="switchTab(3)">
                 <img draggable="false" src="/assets/images/spr_nm_tabs.png" alt="tab-latest">
-                <span>{{ $t('title.latest')}}</span>
+                <span class="font-regular">{{ $t('title.latest')}}</span>
             </div>
             <div class="nm-tab" :class="{ 'nm-tab-selected' : selectedTab === 4}" @click="switchTab(4)">
                 <img draggable="false" src="/assets/images/spr_nm_tabs.png" alt="tab-search">
-                <span>{{ $t('title.search')}}</span>
+                <span class="font-regular">{{ $t('title.search')}}</span>
             </div>
             <div class="nm-tab-clears" :class="{ 'nm-tab-clears-selected' : selectedTab === 5}" @click="switchTab(5)">
                 <img draggable="false" class="nm-tab-clears-img" src="/assets/images/spr_nm_tabs_small.png"
@@ -83,23 +84,24 @@
             <div v-for="course in courseList" class="nm-detailed-search-row">
                 <div class="nm-row-singleline">
                     <div class="nm-row-gamestyle" :style="getGameStyleCSS(course.apariencia)"></div>
-                    <div class="nm-row-name">{{course.name}}</div>
+                    <div class="nm-row-name font-detailed-search">{{course.name}}</div>
                 </div>
                 <div>
                     <div class="nm-row-environment" :style="getEnvironmentCSS(course.apariencia, course.entorno)"></div>
                 </div>
                 <div class="nm-row-line nm-row-line1">
                     <img :src="`/assets/images/nm_icons/like${course.user_data.liked===0 ? 'd' : 's'}.png`" alt="like">
-                    <div>{{course.likes}}</div>
+                    <div class="font-detailed-search">{{course.likes}}</div>
                     <div class="gap"></div>
-                    <img :src="`/assets/images/nm_icons/dislike${course.user_data.liked===1 ? 'd' : 's'}.png`" alt="like">
-                    <div>{{course.dislikes}}</div>
+                    <img :src="`/assets/images/nm_icons/dislike${course.user_data.liked===1 ? 'd' : 's'}.png`"
+                         alt="like">
+                    <div class="font-detailed-search">{{course.dislikes}}</div>
                 </div>
                 <div class="nm-row-line nm-row-line2">
                     <img :src="`/assets/images/nm_icons/tag.png`" alt="like">
-                    <div>{{course.etiquetas}}</div>
+                    <div class="font-detailed-search">{{course.etiquetas}}</div>
                 </div>
-                <div class="nm-row-maker">{{course.author}}</div>
+                <div class="nm-row-maker font-detailed-search">{{course.author}}</div>
             </div>
         </div>
     </div>
@@ -163,6 +165,7 @@
             return {
                 pageNum: 1,
                 selectedTab: 3,
+                viewMode: 1,
                 token: '',
                 authCode: '',
                 gameStyleMap: {
@@ -192,37 +195,13 @@
         },
         mounted() {
             const vm = this;
-            const xhr = new XMLHttpRequest();
-            xhr.open('GET', '/servers.json', true);
-            xhr.send(null);
-            xhr.onreadystatechange = () => {
-                if (xhr.readyState === 4) {
-                    if (xhr.status !== 200) {
-                        alert(vm.$t('message.connection_failed'));
-                    } else {
-                        const servers = JSON.parse(xhr.responseText).servers;
-                        const selectedServerId = urlParams.get('server');
-                        if (selectedServerId === null) {
-                            vm.server = servers[0];
-                        } else {
-                            vm.server = (() => {
-                                for (const server of servers) {
-                                    if (server.id === selectedServerId) {
-                                        return server;
-                                    }
-                                }
-                            })();
-                        }
-                        vm.token = vm.server.is_enginetribe ? vm.server.tokens[vm.$i18n.locale] : vm.server.token;
-                        if (document.cookie.indexOf(`${vm.server.id}_auth_code=`) === -1) {
-                            window.location.href = '/user/login/';
-                        }
-                        vm.authCode = document.cookie.split(`${vm.server.id}_auth_code`)[1].split(';')[0];
-                        vm.imId = document.cookie.split(`${vm.server.id}_im_id`)[1].split(';')[0];
-                        vm.loadCourseList();
-                    }
+            loadServers(
+                vm,
+                urlParams.get('server'),
+                (vm) => {
+                    vm.loadCourseList();
                 }
-            }
+            )
         },
         methods: {
             switchTab(tab) {
@@ -248,30 +227,14 @@
             },
             loadCourseList() {
                 const vm = this;
-                const xhr = new XMLHttpRequest();
-                xhr.open('POST', vm.server.host + '/stages/detailed_search', true);
-                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-                xhr.setRequestHeader('User-Agent', 'GameMaker HTTP')
-                xhr.send(
-                    'auth_code=' + vm.authCode +
-                    '&discord_id=' + vm.imId +
-                    '&token=' + vm.token
-                );
-                xhr.onreadystatechange = () => {
-                    if (xhr.readyState === 4) {
-                        if (xhr.status !== 200) {
-                            alert(vm.$t('message.connection_failed') + '\n' + xhr.status);
-                        } else {
-                            const response = JSON.parse(xhr.responseText);
-                            if (response.hasOwnProperty('error_type')) {
-                                alert(response.error_type + ' - ' + response.message);
-                            } else {
-                                vm.courseList = response.result;
-                            }
-                        }
-                    }
-                }
-
+                smmweApi(
+                    vm,
+                    '/stages/detailed_search',
+                    {},
+                    (vm, response) => {
+                        vm.courseList = response.result;
+                    },
+                )
             }
         }
     });
